@@ -1,0 +1,1 @@
+rootProject.name = "com.development.ktor-development-server"
