@@ -6,6 +6,8 @@ import io.ktor.server.testing.*
 import kotlin.test.*
 import io.ktor.http.*
 import com.development.plugins.*
+import junit.framework.Assert.assertEquals
+import org.junit.Test
 
 class ApplicationTest {
     @Test

@@ -1,13 +1,11 @@
 package com.development.plugins
 
-import io.ktor.server.routing.*
-import io.ktor.server.response.*
+import com.development.routing.alienNews
+import io.ktor.server.routing.routing
 import io.ktor.server.application.*
 
 fun Application.configureRouting() {
     routing {
-        get("/") {
-            call.respondText("Hello World!")
-        }
+        alienNews()
     }
 }

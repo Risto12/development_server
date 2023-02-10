@@ -3,18 +3,18 @@ val kotlinVersion: String by project
 val logbackVersion: String by project
 
 plugins {
-    kotlin("jvm") version "1.8.10"
-    id("io.ktor.plugin") version "2.2.3"
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.8.10"
+    val pluginKotlinVersion = "1.8.10" // == kotlinVersion
+    kotlin("jvm") version pluginKotlinVersion
+    id("io.ktor.plugin") version "2.2.3" // == ktorVersion
+    id("org.jetbrains.kotlin.plugin.serialization") version pluginKotlinVersion
 }
+
 
 group = "com.development"
 version = "0.0.1"
 application {
     mainClass.set("com.development.ApplicationKt")
-
-    val isDevelopment: Boolean = project.ext.has("development")
-    applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
+    applicationDefaultJvmArgs = listOf("-Dio.ktor.development=true") // well this is development server after all so hard-coding is ok
 }
 
 repositories {
