@@ -1,5 +1,8 @@
 package com.development.routing
 
+import com.development.configurations.NewsChannels
+import com.development.configurations.NewsChannelsResource
+import com.development.configurations.ResourceFactory
 import com.development.utility.EndPointStringResponseCreator
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -20,6 +23,8 @@ fun Route.alienNews() {
                 ALIEN_NEWS_CHANNELS,
                 ALIEN_NEWS_CHANNEL
             )
+            val resource = ResourceFactory.factoryMethod(NewsChannelsResource())
+            println(resource)
             call.respondText(endpoints, status = HttpStatusCode.OK)
         }
     }

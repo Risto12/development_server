@@ -1,0 +1,10 @@
+channels:
+  endor:
+    - news:
+        text: "hello"
+        date: "date"
+        brakingNews: "false"
+    - news:
+        text: "hello"
+        date: "hello"
+        brakingNews: "false"
