@@ -1,6 +1,13 @@
 package com.development.configurations
 
+import com.development.utility.DateHelper
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
+import java.util.*
+
+
+fun String.toDate(): Date = DateHelper.toDate(this)
+
 
 @Serializable
 data class Channel(
@@ -14,27 +21,29 @@ data class Content(
     val text: String,
     val date: String,
     val brakingNews: Boolean
-    )
+    ) {
+
+    fun isSameDate(date: Date): Boolean = date == this.date.toDate()
+}
 
 @Serializable
 data class News(val news: Content)
 
 data class NewsChannels(private val channels: Map<String, List<News>>) {
 
-    private fun getLatestUpdateForChannel(news: List<News>): String = news.maxOf { it.news.date }
+    private fun getLatestUpdateForChannel(news: List<News>) = news.maxOf { it.news.date.toDate() }
 
     fun getChannels(): List<Channel>? {
         // TODO need more specific timing to sort this correctly
         if(channels.isEmpty()) return null
-        return channels.map {
-            val name = it.key // TODO simplify this
-            val latestUpdate = getLatestUpdateForChannel(it.value)
-            it.value.first { news -> news.news.date == latestUpdate }.let {
-                    news ->
+        return channels.map { entry ->
+            val latestUpdate = getLatestUpdateForChannel(entry.value)
+            entry.value.first { it.news.isSameDate(latestUpdate) }.let {
+                    channel ->
                 Channel(
-                    name = name,
-                    latestUpdate = news.news.date,
-                    brakingNews = news.news.brakingNews
+                    name = entry.key,
+                    latestUpdate = channel.news.date,
+                    brakingNews = channel.news.brakingNews
                 )
             }
         }

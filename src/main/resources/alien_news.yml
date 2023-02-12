@@ -2,18 +2,30 @@ channels:
   endor:
     - news:
         text: "hello"
-        date: "8/11/2098"
+        date: "8-11-2098 20:31"
         brakingNews: false
     - news:
         text: "hello"
-        date: "8/11/2098"
+        date: "8-11-2098 20:38"
+        brakingNews: true
+    - news:
+        text: "hello"
+        date: "8-11-2098 20:32"
         brakingNews: false
+    - news:
+        text: "hello"
+        date: "8-11-2098 20:21"
+        brakingNews: true
+    - news:
+        text: "hello"
+        date: "8-11-2098 20:36"
+        brakingNews: true
   mars:
     - news:
         text: "hello"
-        date: "8/11/2098"
+        date: "8-11-2098 20:30"
         brakingNews: false
     - news:
         text: "hello"
-        date: "8/11/2098"
+        date: "8-11-2098 20:30"
         brakingNews: false
