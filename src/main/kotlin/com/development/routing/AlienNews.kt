@@ -1,9 +1,7 @@
 package com.development.routing
 
-import com.development.configurations.*
-import com.development.utility.EndPointStringResponseCreator
-import io.ktor.http.*
-
+import com.development.resources.*
+import com.development.resources.newsChannel.NewsChannelResourceBuilder
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -11,20 +9,17 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToJsonElement
 
-const val VERSION_ONE = "V1"
+const val CHANNEL_ID_URL_RESOURCE = "id"
+const val VERSION_ONE = "v1"
 const val ALIEN_NEWS_ROOT_PATH = "/alien/news"
 const val ALIEN_NEWS_CHANNELS = "$ALIEN_NEWS_ROOT_PATH/$VERSION_ONE/channels"
-const val ALIEN_NEWS_CHANNEL = "$ALIEN_NEWS_ROOT_PATH/$VERSION_ONE/channel/{id?}"
+const val ALIEN_NEWS_CHANNEL = "$ALIEN_NEWS_ROOT_PATH/$VERSION_ONE/channel/{$CHANNEL_ID_URL_RESOURCE?}"
 
-
-fun ResourceFactory.getNewsChannelResource() = factoryMethod(NewsChannelsResource())
+fun YAMLResourceFactory.getNewsChannelResource() = factoryMethod(NewsChannelResourceBuilder())
 
 @Serializable
 data class EndPoint(val path: String)
 
-/**
- * Basic API endpoint
- */
 fun Route.alienNews() {
     route(ALIEN_NEWS_ROOT_PATH) {
         get {
@@ -35,15 +30,16 @@ fun Route.alienNews() {
 
     route(ALIEN_NEWS_CHANNELS) {
         get {
-            val resource = ResourceFactory.getNewsChannelResource()
+            val resource = YAMLResourceFactory.getNewsChannelResource()
             call.respond(Json.encodeToJsonElement(resource.getChannels()))
         }
     }
 
     route(ALIEN_NEWS_CHANNEL) {
         get {
-            // TODO create ktor validation for this
-            val channel = ResourceFactory.getNewsChannelResource().getChannel(call.parameters["id"]!!)
+            val channel = YAMLResourceFactory.getNewsChannelResource().getChannel(
+                call.parameters[CHANNEL_ID_URL_RESOURCE]!!
+            )
             call.respond(Json.encodeToJsonElement(channel))
         }
     }
