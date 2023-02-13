@@ -11,8 +11,8 @@ data class NewsChannelsResource(private val channels: Map<String, List<NewsResou
 
     private fun getLatestUpdateForChannel(news: List<NewsResource>) = news.maxOf { it.news.date.toDate() }
 
-    fun getChannels(): List<NewsChannel>? {
-        if(channels.isEmpty()) return null
+    fun getChannels(): List<NewsChannel> {
+        if(channels.isEmpty()) return listOf()
         return channels.map { entry ->
             val latestUpdate = getLatestUpdateForChannel(entry.value)
             entry.value.first { it.news.date.toDate() == latestUpdate }.let {
