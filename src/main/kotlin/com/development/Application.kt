@@ -13,8 +13,10 @@ fun main() {
 
 fun Application.module() {
     configureSerialization()
+    configureAuthentication()
     configureSockets()
+    configStatusPages()
     configureRouting()
     configureResources()
-    configStatusPages()
+
 }
