@@ -1,6 +1,7 @@
 package com.development.routing
 
 import com.development.exceptions.NoContentException
+import com.development.models.Endpoints
 import com.development.plugins.BASIC_AUTH
 import com.development.resources.*
 import com.development.resources.newsChannel.NewsChannelResourceBuilder
@@ -22,9 +23,6 @@ const val ALIEN_NEWS_AUTHENTICATED_CHANNEL = "$ALIEN_NEWS_ROOT_PATH/$VERSION_ONE
 
 fun YAMLResourceFactory.getNewsChannelResource() = factoryMethod(NewsChannelResourceBuilder())
 
-@Serializable
-data class EndPoint(val path: String)
-
 private fun getChannelAsJson(channel: String) = Json.encodeToJsonElement(
     YAMLResourceFactory.getNewsChannelResource().getChannel(channel)
         ?: throw NoContentException(message = "No such channel")
@@ -37,10 +35,10 @@ fun Route.alienNews() {
         get {
             val endpoints = Json.encodeToJsonElement(
                 listOf(
-                    EndPoint(ALIEN_NEWS_CHANNEL),
-                    EndPoint(ALIEN_NEWS_CHANNELS),
-                    EndPoint(ALIEN_NEWS_AUTHENTICATED_CHANNEL),
-                    EndPoint(ALIEN_NEWS_AUTHENTICATED_CHANNELS)
+                    Endpoints(ALIEN_NEWS_CHANNEL),
+                    Endpoints(ALIEN_NEWS_CHANNELS),
+                    Endpoints(ALIEN_NEWS_AUTHENTICATED_CHANNEL),
+                    Endpoints(ALIEN_NEWS_AUTHENTICATED_CHANNELS)
                 )
             )
             call.respond(endpoints)
