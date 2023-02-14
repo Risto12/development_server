@@ -22,23 +22,30 @@ data class AlienRealmJwtConfiguration(
     val secret: String,
     val issuer: String,
     val audience: String,
+    val validTimeMinutes: Int
 ) {
+    fun validTimeAsMillis(): Int = (validTimeMinutes * 60) * 1000
+
     companion object {
+        private fun getProperty(name: String, config: ApplicationConfig) = config.property(name).getString()
+
         fun fromConfigs(config: ApplicationConfig) = AlienRealmJwtConfiguration(
-            secret = config.property("jwt.secret").getString(),
-            issuer = config.property("jwt.issuer").getString(),
-            audience = config.property("jwt.audience").getString(),
-            realm = config.property("jwt.realm").getString()
+            secret = getProperty("jwt.secret", config),
+            issuer = getProperty("jwt.issuer", config),
+            audience = getProperty("jwt.audience", config),
+            realm = getProperty("jwt.realm", config),
+            validTimeMinutes = getProperty("jwt.valid_time_minutes", config).toInt()
         )
     }
 }
 
+fun Application.getAlienRealmJwtConfiguration() = AlienRealmJwtConfiguration.fromConfigs(
+    config = this.environment.config
+)
 
 fun Application.configureAuthentication() {
 
-    val (alienRealm, alienSecret, issuer, alienAudience) = AlienRealmJwtConfiguration.fromConfigs(
-        config = this.environment.config
-    )
+    val (alienRealm, alienSecret, issuer, alienAudience) = getAlienRealmJwtConfiguration()
 
     install(Authentication) {
         basic(BASIC_AUTH) {
