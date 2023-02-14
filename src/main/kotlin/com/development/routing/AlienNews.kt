@@ -3,13 +3,14 @@ package com.development.routing
 import com.development.exceptions.NoContentException
 import com.development.models.Endpoints
 import com.development.plugins.BASIC_AUTH
+import com.development.plugins.JWT_TOKEN_AUTH
 import com.development.resources.*
 import com.development.resources.newsChannel.NewsChannelResourceBuilder
+import com.development.utility.EndPointInfoGenerator
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToJsonElement
 
@@ -18,8 +19,11 @@ const val VERSION_ONE = "v1"
 const val ALIEN_NEWS_ROOT_PATH = "/alien/news"
 const val ALIEN_NEWS_CHANNELS = "$ALIEN_NEWS_ROOT_PATH/$VERSION_ONE/channels"
 const val ALIEN_NEWS_CHANNEL = "$ALIEN_NEWS_ROOT_PATH/$VERSION_ONE/channel/{$CHANNEL_ID_URL_RESOURCE}"
-const val ALIEN_NEWS_AUTHENTICATED_CHANNELS = "$ALIEN_NEWS_ROOT_PATH/$VERSION_ONE/authenticated/channels"
-const val ALIEN_NEWS_AUTHENTICATED_CHANNEL = "$ALIEN_NEWS_ROOT_PATH/$VERSION_ONE/authenticated/channel/{$CHANNEL_ID_URL_RESOURCE}"
+const val ALIEN_NEWS_BASIC_AUTHENTICATED_CHANNELS = "$ALIEN_NEWS_ROOT_PATH/$VERSION_ONE/authenticated/basic/channels"
+const val ALIEN_NEWS_BASIC_AUTHENTICATED_CHANNEL = "$ALIEN_NEWS_ROOT_PATH/$VERSION_ONE/authenticated/basic/channel/{$CHANNEL_ID_URL_RESOURCE}"
+const val ALIEN_NEWS_TOKEN_AUTHENTICATED_LOGIN = "$ALIEN_NEWS_ROOT_PATH/$VERSION_ONE/authenticated/token/login"
+const val ALIEN_NEWS_TOKEN_AUTHENTICATED_CHANNELS = "$ALIEN_NEWS_ROOT_PATH/$VERSION_ONE/authenticated/token/channels"
+const val ALIEN_NEWS_TOKEN_AUTHENTICATED_CHANNEL = "$ALIEN_NEWS_ROOT_PATH/$VERSION_ONE/authenticated/token/channel/{$CHANNEL_ID_URL_RESOURCE}"
 
 fun YAMLResourceFactory.getNewsChannelResource() = factoryMethod(NewsChannelResourceBuilder())
 
@@ -33,14 +37,7 @@ private fun getChannelsAsJson() = Json.encodeToJsonElement(YAMLResourceFactory.g
 fun Route.alienNews() {
     route(ALIEN_NEWS_ROOT_PATH) {
         get {
-            val endpoints = Json.encodeToJsonElement(
-                listOf(
-                    Endpoints(ALIEN_NEWS_CHANNEL),
-                    Endpoints(ALIEN_NEWS_CHANNELS),
-                    Endpoints(ALIEN_NEWS_AUTHENTICATED_CHANNEL),
-                    Endpoints(ALIEN_NEWS_AUTHENTICATED_CHANNELS)
-                )
-            )
+            val endpoints = Json.encodeToJsonElement(EndPointInfoGenerator.getAlienNews())
             call.respond(endpoints)
         }
     }
@@ -60,7 +57,7 @@ fun Route.alienNews() {
         }
     }
 
-    route(ALIEN_NEWS_AUTHENTICATED_CHANNELS) {
+    route(ALIEN_NEWS_BASIC_AUTHENTICATED_CHANNELS) {
         authenticate(BASIC_AUTH) {
             get {
                 call.respond(getChannelsAsJson())
@@ -68,9 +65,27 @@ fun Route.alienNews() {
         }
     }
 
-    route(ALIEN_NEWS_AUTHENTICATED_CHANNEL) {
-
+    route(ALIEN_NEWS_BASIC_AUTHENTICATED_CHANNEL) {
         authenticate(BASIC_AUTH) {
+            get {
+                val channel = getChannelAsJson(call.parameters[CHANNEL_ID_URL_RESOURCE]!!)
+                call.respond(channel)
+            }
+        }
+    }
+
+
+
+    route(ALIEN_NEWS_BASIC_AUTHENTICATED_CHANNELS) {
+        authenticate(JWT_TOKEN_AUTH) {
+            get {
+                call.respond(getChannelsAsJson())
+            }
+        }
+    }
+
+    route(ALIEN_NEWS_BASIC_AUTHENTICATED_CHANNEL) {
+        authenticate(JWT_TOKEN_AUTH) {
             get {
                 val channel = getChannelAsJson(call.parameters[CHANNEL_ID_URL_RESOURCE]!!)
                 call.respond(channel)
