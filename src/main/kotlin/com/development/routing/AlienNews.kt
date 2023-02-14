@@ -37,13 +37,15 @@ const val ALIEN_NEWS_IMAGE = "$ALIEN_NEWS_ROOT_PATH/$VERSION_ONE/image"
 const val ALIEN_NEWS_BASIC_AUTHENTICATED_CHANNELS = "$ALIEN_NEWS_ROOT_PATH/$VERSION_ONE/authenticated/basic/channels"
 const val ALIEN_NEWS_BASIC_AUTHENTICATED_CHANNEL =
     "$ALIEN_NEWS_ROOT_PATH/$VERSION_ONE/authenticated/basic/channel/{$CHANNEL_ID_URL_RESOURCE}"
-const val ALIEN_NEWS_BASIC_AUTHENTICATED_IMAGE = "$ALIEN_NEWS_ROOT_PATH/$VERSION_ONE/authenticated/basic/image/{image_id}"
+const val ALIEN_NEWS_BASIC_AUTHENTICATED_IMAGE =
+    "$ALIEN_NEWS_ROOT_PATH/$VERSION_ONE/authenticated/basic/image/$IMAGE_ID_URL_RESOURCE"
 
 const val ALIEN_NEWS_TOKEN_AUTHENTICATED_LOGIN = "$ALIEN_NEWS_ROOT_PATH/$VERSION_ONE/authenticated/token/login"
 const val ALIEN_NEWS_TOKEN_AUTHENTICATED_CHANNELS = "$ALIEN_NEWS_ROOT_PATH/$VERSION_ONE/authenticated/token/channels"
 const val ALIEN_NEWS_TOKEN_AUTHENTICATED_CHANNEL =
     "$ALIEN_NEWS_ROOT_PATH/$VERSION_ONE/authenticated/token/channel/{$CHANNEL_ID_URL_RESOURCE}"
-const val ALIEN_NEWS_TOKEN_AUTHENTICATED_IMAGE = "$ALIEN_NEWS_ROOT_PATH/$VERSION_ONE/authenticated/token/image/{image_id}"
+const val ALIEN_NEWS_TOKEN_AUTHENTICATED_IMAGE =
+    "$ALIEN_NEWS_ROOT_PATH/$VERSION_ONE/authenticated/token/image/$IMAGE_ID_URL_RESOURCE"
 
 fun YAMLResourceFactory.getNewsChannelResource() = factoryMethod(NewsChannelResourceBuilder())
 
@@ -118,5 +120,17 @@ fun Route.alienNews() {
     static(ALIEN_NEWS_IMAGE) {  // TODO when time create own implementation of the file version of this I don't like resource folder used for this
         // reason for this is that default file version of this doesn't take "." as an argument...
         resources(".")
+    }
+
+    static(ALIEN_NEWS_BASIC_AUTHENTICATED_IMAGE) {
+        authenticate(BASIC_AUTH) { // TODO fix
+            resources(".")
+        }
+    }
+
+    static(ALIEN_NEWS_TOKEN_AUTHENTICATED_IMAGE) {
+        authenticate(JWT_TOKEN_AUTH) {
+            resources(".") // TODO fix
+        }
     }
 }
