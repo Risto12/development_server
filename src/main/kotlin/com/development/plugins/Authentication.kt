@@ -1,12 +1,8 @@
 package com.development.plugins
 
-
-
-
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
-import com.development.resources.YAMLResourceFactory
-import com.development.resources.authentication.AuthenticationResourceBuilder
+import com.development.utility.PropertyHelper.getProperty
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -22,13 +18,11 @@ data class AlienRealmJwtConfiguration(
     val secret: String,
     val issuer: String,
     val audience: String,
-    val validTimeMinutes: Int
+    private val validTimeMinutes: Int
 ) {
     fun validTimeAsMillis(): Int = (validTimeMinutes * 60) * 1000
 
     companion object {
-        private fun getProperty(name: String, config: ApplicationConfig) = config.property(name).getString()
-
         fun fromConfigs(config: ApplicationConfig) = AlienRealmJwtConfiguration(
             secret = getProperty("jwt.secret", config),
             issuer = getProperty("jwt.issuer", config),
@@ -39,20 +33,36 @@ data class AlienRealmJwtConfiguration(
     }
 }
 
+data class AlienRealmBasicAuthConfigurations(
+    val username: String,
+    val password: String,
+) {
+    companion object {
+        fun fromConfigs(config: ApplicationConfig) = AlienRealmBasicAuthConfigurations(
+            username = getProperty("basic_auth.username", config),
+            password = getProperty("basic_auth.password", config),
+        )
+    }
+}
+
 fun Application.getAlienRealmJwtConfiguration() = AlienRealmJwtConfiguration.fromConfigs(
-    config = this.environment.config
+    this.environment.config
+)
+
+fun Application.getBasicAuthConfiguration() = AlienRealmBasicAuthConfigurations.fromConfigs(
+    this.environment.config
 )
 
 fun Application.configureAuthentication() {
 
     val (alienRealm, alienSecret, issuer, alienAudience) = getAlienRealmJwtConfiguration()
+    val (basicAuthUsername, basicAuthPassword) = getBasicAuthConfiguration()
 
     install(Authentication) {
         basic(BASIC_AUTH) {
-            realm = "Access to the '/alien/news/*/authenticated/*' paths"
-            val authentication = YAMLResourceFactory.factoryMethod(AuthenticationResourceBuilder())
+            realm = alienRealm
             validate { credentials ->
-                if (credentials.name == authentication.username && credentials.password == authentication.password) {
+                if (credentials.name == basicAuthUsername && credentials.password == basicAuthPassword) {
                     UserIdPrincipal(credentials.name)
                 } else {
                     null
