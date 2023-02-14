@@ -18,6 +18,7 @@ import io.ktor.server.http.content.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.util.pipeline.*
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToJsonElement
 import java.io.File
@@ -54,6 +55,16 @@ private fun getChannelAsJson(channel: String) = Json.encodeToJsonElement(
 private fun getChannelsAsJson() = Json.encodeToJsonElement(YAMLResourceFactory.getNewsChannelResource().getChannels())
 
 fun Route.alienNews() {
+
+    val newsChannels: suspend PipelineContext<Unit, ApplicationCall>.(Unit) -> Unit = {
+        call.respond(getChannelsAsJson())
+    }
+
+    val newsChannel: suspend PipelineContext<Unit, ApplicationCall>.(Unit) -> Unit = {
+        val channel = getChannelAsJson(call.parameters[CHANNEL_ID_URL_RESOURCE]!!)
+        call.respond(channel)
+    }
+
     route(ALIEN_NEWS_ROOT_PATH) {
         get {
             val endpoints = Json.encodeToJsonElement(EndPointInfoGenerator.getAlienNews())
@@ -62,35 +73,16 @@ fun Route.alienNews() {
     }
 
     // Authenticated and non authenticated routing could have been made as sub routes
-    route(ALIEN_NEWS_CHANNELS) {
-        get {
-            call.respond(getChannelsAsJson())
-        }
-    }
+    route(ALIEN_NEWS_CHANNELS) { get(newsChannels) }
 
-    route(ALIEN_NEWS_CHANNEL) {
-        get {
-            val channel = getChannelAsJson(call.parameters[CHANNEL_ID_URL_RESOURCE]!!)
-            call.respond(channel)
-
-        }
-    }
+    route(ALIEN_NEWS_CHANNEL) { get(newsChannel) }
 
     route(ALIEN_NEWS_BASIC_AUTHENTICATED_CHANNELS) {
-        authenticate(BASIC_AUTH) {
-            get {
-                call.respond(getChannelsAsJson())
-            }
-        }
+        authenticate(BASIC_AUTH) { get(newsChannels) }
     }
 
     route(ALIEN_NEWS_BASIC_AUTHENTICATED_CHANNEL) {
-        authenticate(BASIC_AUTH) {
-            get {
-                val channel = getChannelAsJson(call.parameters[CHANNEL_ID_URL_RESOURCE]!!)
-                call.respond(channel)
-            }
-        }
+        authenticate(BASIC_AUTH) { get(newsChannel) }
     }
 
 
@@ -115,20 +107,11 @@ fun Route.alienNews() {
     }
 
     route(ALIEN_NEWS_TOKEN_AUTHENTICATED_CHANNELS) {
-        authenticate(JWT_TOKEN_AUTH) {
-            get {
-                call.respond(getChannelsAsJson())
-            }
-        }
+        authenticate(JWT_TOKEN_AUTH) { get(newsChannels) }
     }
 
     route(ALIEN_NEWS_TOKEN_AUTHENTICATED_CHANNEL) {
-        authenticate(JWT_TOKEN_AUTH) {
-            get {
-                val channel = getChannelAsJson(call.parameters[CHANNEL_ID_URL_RESOURCE]!!)
-                call.respond(channel)
-            }
-        }
+        authenticate(JWT_TOKEN_AUTH) { get(newsChannel) }
     }
 
     staticBasePackage = "images"
