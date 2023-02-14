@@ -75,8 +75,15 @@ fun Route.alienNews() {
     }
 
 
+    route(ALIEN_NEWS_TOKEN_AUTHENTICATED_LOGIN) {
+        authenticate(JWT_TOKEN_AUTH) {
+            post {
+                call.respondText("hello world")
+            }
+        }
+    }
 
-    route(ALIEN_NEWS_BASIC_AUTHENTICATED_CHANNELS) {
+    route(ALIEN_NEWS_TOKEN_AUTHENTICATED_CHANNELS) {
         authenticate(JWT_TOKEN_AUTH) {
             get {
                 call.respond(getChannelsAsJson())
@@ -84,7 +91,7 @@ fun Route.alienNews() {
         }
     }
 
-    route(ALIEN_NEWS_BASIC_AUTHENTICATED_CHANNEL) {
+    route(ALIEN_NEWS_TOKEN_AUTHENTICATED_CHANNEL) {
         authenticate(JWT_TOKEN_AUTH) {
             get {
                 val channel = getChannelAsJson(call.parameters[CHANNEL_ID_URL_RESOURCE]!!)
