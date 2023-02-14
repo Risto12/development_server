@@ -3,6 +3,8 @@ channels:
     - news:
         text: "hello"
         date: "1-12-2098 20:31:20"
+        imageIds:
+            - "dooper21"
         brakingNews: false
     - news:
         text: "hello"
@@ -11,6 +13,9 @@ channels:
     - news:
         text: "hello"
         date: "2-11-2099 20:32:21"
+        imageIds:
+            - "al12"
+            - "al13"
         brakingNews: false
     - news:
         text: "hello"
