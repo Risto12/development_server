@@ -1,16 +1,19 @@
 channels:
   endor:
     - news:
+        header: "Aliens landing on moon"
         text: "hello"
         date: "1-12-2098 20:31:20"
         imageIds:
             - "moon.jpg"
         brakingNews: false
     - news:
+        header: "Aliens inventing steam engine"
         text: "hello"
         date: "2-11-2098 20:38:20"
         brakingNews: true
     - news:
+        header: "Galaxy changing"
         text: "hello"
         date: "2-11-2099 20:32:21"
         imageIds:
@@ -19,19 +22,23 @@ channels:
             - "universe.jpg"
         brakingNews: false
     - news:
+        header: "Miracle"
         text: "hello"
         date: "24-12-2098 20:21:20"
         brakingNews: true
     - news:
+        header: "Random"
         text: "hello"
         date: "8-11-2097 20:36:20"
         brakingNews: true
   mars:
     - news:
+        header: "Aliens escaped"
         text: "hello"
         date: "8-11-2098 20:30:20"
-        brakingNews: false
+        brakingNews: true
     - news:
+        header: "Aliens attacking"
         text: "hello"
         date: "8-11-2097 20:30:11"
-        brakingNews: false
+        brakingNews: true
