@@ -4,7 +4,7 @@ channels:
         text: "hello"
         date: "1-12-2098 20:31:20"
         imageIds:
-            - "dooper21"
+            - "moon.jpg"
         brakingNews: false
     - news:
         text: "hello"
@@ -14,8 +14,9 @@ channels:
         text: "hello"
         date: "2-11-2099 20:32:21"
         imageIds:
-            - "al12"
-            - "al13"
+            - "galaxy.jpg"
+            - "landing.jpg"
+            - "universe.jpg"
         brakingNews: false
     - news:
         text: "hello"
