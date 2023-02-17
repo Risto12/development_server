@@ -27,7 +27,7 @@ data class NewsChannelsResource(private val channels: Map<String, List<NewsResou
         }
     }
 
-    fun getChannel(channel: String) {
-        channels.mapKeys { it.key.lowercase() }[channel.lowercase()]?.sortedByDescending { it.news.date.toDate() } // TODO make this more readable
-    }
+    fun getChannel(channel: String) =
+        channels.mapKeys { it.key.lowercase() }[channel.lowercase()]?.sortedByDescending { it.news.date.toDate() }
+
 }
