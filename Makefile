@@ -8,3 +8,9 @@ docker-run:
 
 docker-shell:
 	docker run -it --entrypoint /bin/bash $(application)
+
+build-jar:
+	./gradlew buildfatJar
+
+run-jar:
+	java -jar build/libs/com.development.ktor-development-server-all.jar
