@@ -13,7 +13,13 @@ group = "com.development"
 version = "0.0.1"
 application {
     mainClass.set("com.development.ApplicationKt")
-    applicationDefaultJvmArgs = listOf("-Dio.ktor.development=true") // well this is development server after all so hard-coding is ok
+    //mainClass.set("io.ktor.server.netty.EngineMain")
+}
+ktor {
+
+    fatJar {
+        archiveFileName.set("development-server.jar")
+    }
 }
 
 repositories {
