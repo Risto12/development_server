@@ -1,44 +1,49 @@
 channels:
-  endor:
+  hoplon:
     - news:
-        header: "Aliens landing on moon"
-        text: "hello"
+        header: "Aliens landing on the Xarlan-7"
+        text: "In the far away galaxy of Hoplon the primitive alien race called Sudiputs have finally succeeded on launching them self to their nearest planet"
         date: "1-12-2098 20:31:20"
         imageIds:
             - "moon.jpg"
         brakingNews: false
     - news:
-        header: "Aliens inventing steam engine"
-        text: "hello"
-        date: "2-11-2098 20:38:20"
-        brakingNews: true
+        header: "Sudiputs inventing steam engine"
+        text: "After long time of none development the alien race from Xarlan-6 have finally managed to harness the power of steam."
+        date: "2-11-2048 20:38:20"
+        brakingNews: false
     - news:
-        header: "Galaxy changing"
-        text: "hello"
-        date: "2-11-2099 20:32:21"
+        header: "Beautiful wildlife photos from Hoplon"
+        text: "The Hoplon system is wildly known of its barbarian inhabitants but every dark place has its bright side. We collected the most beautiful photos, there where not many, on this weeks news survey of the Hoplon system"
+        date: "2-11-2130 20:32:21"
         imageIds:
             - "galaxy.jpg"
             - "landing.jpg"
             - "universe.jpg"
         brakingNews: false
     - news:
-        header: "Miracle"
-        text: "hello"
-        date: "24-12-2098 20:21:20"
+        header: "Nature preservation department prevents mass distinction of Sudiputs"
+        text: "Department of the nature preservation intervened Sudiputs from destroying them selfs from mass distinction with nuclear energy. All started from territorial dispute between Sudiputs that almost ended in their own doom. Xarlan-6 is part of the nature protection system that allowed us intervene"
+        date: "24-12-2134 20:21:20"
         brakingNews: true
     - news:
-        header: "Random"
-        text: "hello"
+        header: "News test message"
+        text: "This is test message for testing new galaxy wide communication 700g channel"
         date: "8-11-2097 20:36:20"
-        brakingNews: true
-  mars:
+        brakingNews: false
     - news:
-        header: "Aliens escaped"
-        text: "hello"
+        header: "Galaxy police asking for help"
+        text: "Police is asking for help to identify criminals who kidnapped primitive alien species in Xarlan-6 and returned them after animal experimentation. Testing on Sudiputs was forbidden by law 10 years ago."
+        date: "8-11-2067 20:36:20"
+        brakingNews: true
+  radon:
+    - news:
+        header: "New mineral called urlun-2121 found"
+        text: "After long search the Porlon industry finally discovered new mineral called urlun-2121 named by its inventor Urlun Durlun"
         date: "8-11-2098 20:30:20"
-        brakingNews: true
+        brakingNews: false
     - news:
-        header: "Aliens attacking"
-        text: "hello"
+        header: "News from Radon system"
+        text: "We are proud to present Radon news from Vordom galaxy"
         date: "8-11-2097 20:30:11"
-        brakingNews: true
+        brakingNews: false
